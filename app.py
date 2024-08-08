@@ -22,14 +22,14 @@ if st.button('생성하기'):
                 justify-content: space-between;
                 align-items: center;
                 transform-origin: center;
+                background-color: transparent;
             }}
             .handle {{
                 width: 20px;
                 height: 20px;
                 background-color: black;
                 border-radius: 50%;
-                cursor: pointer;
-                position: relative;
+                position: absolute;
             }}
             #bar1 {{
                 background-color: red;
@@ -47,16 +47,16 @@ if st.button('생성하기'):
     </head>
     <body>
         <div id="bar1" class="bar">
-            <div class="handle" id="handle1a"></div>
-            <div class="handle" id="handle1b"></div>
+            <div class="handle" id="handle1a" style="left: -10px; top: -10px;"></div>
+            <div class="handle" id="handle1b" style="right: -10px; top: -10px;"></div>
         </div>
         <div id="bar2" class="bar">
-            <div class="handle" id="handle2a"></div>
-            <div class="handle" id="handle2b"></div>
+            <div class="handle" id="handle2a" style="left: -10px; top: -10px;"></div>
+            <div class="handle" id="handle2b" style="right: -10px; top: -10px;"></div>
         </div>
         <div id="bar3" class="bar">
-            <div class="handle" id="handle3a"></div>
-            <div class="handle" id="handle3b"></div>
+            <div class="handle" id="handle3a" style="left: -10px; top: -10px;"></div>
+            <div class="handle" id="handle3b" style="right: -10px; top: -10px;"></div>
         </div>
         
         <script>
@@ -116,8 +116,12 @@ if st.button('생성하기'):
 
                 document.addEventListener('mousemove', (e) => {{
                     if (handle.isDragging) {{
-                        handle.style.left = `${{e.clientX - handle.startX}}px`;
-                        handle.style.top = `${{e.clientY - handle.startY}}px`;
+                        const handleRect = handle.getBoundingClientRect();
+                        const handleCenterX = handleRect.left + handleRect.width / 2;
+                        const handleCenterY = handleRect.top + handleRect.height / 2;
+                        
+                        handle.style.left = `${{e.clientX - handle.startX - handleRect.width / 2}}px`;
+                        handle.style.top = `${{e.clientY - handle.startY - handleRect.height / 2}}px`;
 
                         handles.forEach(otherHandle => {{
                             if (handle !== otherHandle) {{
