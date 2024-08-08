@@ -15,55 +15,90 @@ if st.button('생성하기'):
     <head>
         <style>
             .bar {{
-                height: 20px;  /* 두께를 증가시킵니다 */
+                height: 20px;
                 position: absolute;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+            }}
+            .bar .handle {{
+                width: 20px;
+                height: 20px;
+                background-color: black;
+                border-radius: 50%;
                 cursor: pointer;
             }}
             #bar1 {{
                 background-color: red;
-                width: {a * 30}px;  /* 길이를 3배로 증가시킵니다 */
+                width: {a * 30}px;
             }}
             #bar2 {{
                 background-color: green;
-                width: {b * 30}px;  /* 길이를 3배로 증가시킵니다 */
+                width: {b * 30}px;
             }}
             #bar3 {{
                 background-color: blue;
-                width: {c * 30}px;  /* 길이를 3배로 증가시킵니다 */
+                width: {c * 30}px;
             }}
         </style>
     </head>
     <body>
-        <div id="bar1" class="bar"></div>
-        <div id="bar2" class="bar"></div>
-        <div id="bar3" class="bar"></div>
+        <div id="bar1" class="bar">
+            <div class="handle" id="handle1a"></div>
+            <div class="handle" id="handle1b"></div>
+        </div>
+        <div id="bar2" class="bar">
+            <div class="handle" id="handle2a"></div>
+            <div class="handle" id="handle2b"></div>
+        </div>
+        <div id="bar3" class="bar">
+            <div class="handle" id="handle3a"></div>
+            <div class="handle" id="handle3b"></div>
+        </div>
         
         <script>
             const bars = document.querySelectorAll('.bar');
             
             bars.forEach(bar => {{
+                bar.style.left = '100px';
+                bar.style.top = '100px';
+                bar.style.transformOrigin = 'left center';
+                let isDragging = false;
+                let isRotating = false;
+                let startX, startY, initialAngle, handle;
+
                 bar.addEventListener('mousedown', (e) => {{
-                    const bar = e.target;
-                    const offsetX = e.clientX - bar.getBoundingClientRect().left;
-                    const offsetY = e.clientY - bar.getBoundingClientRect().top;
-
-                    const onMouseMove = (e) => {{
-                        bar.style.left = `${{e.clientX - offsetX}}px`;
-                        bar.style.top = `${{e.clientY - offsetY}}px`;
-                    }};
-
-                    document.addEventListener('mousemove', onMouseMove);
-
-                    document.addEventListener('mouseup', () => {{
-                        document.removeEventListener('mousemove', onMouseMove);
-                    }}, {{ once: true }});
+                    if (e.target.classList.contains('handle')) {{
+                        isRotating = true;
+                        handle = e.target;
+                        const rect = bar.getBoundingClientRect();
+                        startX = e.clientX - rect.left;
+                        startY = e.clientY - rect.top;
+                        initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
+                    }} else {{
+                        isDragging = true;
+                        startX = e.clientX - bar.getBoundingClientRect().left;
+                        startY = e.clientY - bar.getBoundingClientRect().top;
+                    }}
                 }});
-                
-                bar.addEventListener('wheel', (e) => {{
-                    const currentAngle = parseInt(bar.getAttribute('data-angle')) || 0;
-                    const newAngle = currentAngle + (e.deltaY > 0 ? 10 : -10);
-                    bar.style.transform = 'rotate(' + newAngle + 'deg)';
-                    bar.setAttribute('data-angle', newAngle);
+
+                document.addEventListener('mousemove', (e) => {{
+                    if (isDragging) {{
+                        bar.style.left = `${{e.clientX - startX}}px`;
+                        bar.style.top = `${{e.clientY - startY}}px`;
+                    }} else if (isRotating) {{
+                        const rect = bar.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+                        bar.style.transform = `rotate(${{angle}}deg)`;
+                        bar.setAttribute('data-angle', angle);
+                    }}
+                }});
+
+                document.addEventListener('mouseup', () => {{
+                    isDragging = false;
+                    isRotating = false;
                 }});
             }});
         </script>
