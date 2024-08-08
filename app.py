@@ -60,6 +60,8 @@ if st.button('생성하기'):
         
         <script>
             const bars = document.querySelectorAll('.bar');
+            const handles = document.querySelectorAll('.handle');
+            const SNAP_DISTANCE = 30;  // 자석 효과 거리 (픽셀 단위)
             
             bars.forEach(bar => {{
                 bar.style.left = '100px';
@@ -101,6 +103,25 @@ if st.button('생성하기'):
                 document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
+                }});
+            }});
+
+            handles.forEach(handle => {{
+                handle.addEventListener('mousemove', () => {{
+                    handles.forEach(otherHandle => {{
+                        if (handle !== otherHandle) {{
+                            const rect1 = handle.getBoundingClientRect();
+                            const rect2 = otherHandle.getBoundingClientRect();
+                            const dx = rect1.left - rect2.left;
+                            const dy = rect1.top - rect2.top;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance < SNAP_DISTANCE) {{
+                                handle.style.left = `${{rect2.left + window.scrollX}}px`;
+                                handle.style.top = `${{rect2.top + window.scrollY}}px`;
+                            }}
+                        }}
+                    }});
                 }});
             }});
         </script>
