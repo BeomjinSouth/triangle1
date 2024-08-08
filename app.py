@@ -22,14 +22,13 @@ if st.button('생성하기'):
                 justify-content: space-between;
                 align-items: center;
                 transform-origin: center;
-                background-color: transparent;
             }}
             .handle {{
                 width: 20px;
                 height: 20px;
                 background-color: black;
                 border-radius: 50%;
-                position: absolute;
+                cursor: pointer;
             }}
             #bar1 {{
                 background-color: red;
@@ -47,23 +46,21 @@ if st.button('생성하기'):
     </head>
     <body>
         <div id="bar1" class="bar">
-            <div class="handle" id="handle1a" style="left: -10px; top: -10px;"></div>
-            <div class="handle" id="handle1b" style="right: -10px; top: -10px;"></div>
+            <div class="handle" id="handle1a"></div>
+            <div class="handle" id="handle1b"></div>
         </div>
         <div id="bar2" class="bar">
-            <div class="handle" id="handle2a" style="left: -10px; top: -10px;"></div>
-            <div class="handle" id="handle2b" style="right: -10px; top: -10px;"></div>
+            <div class="handle" id="handle2a"></div>
+            <div class="handle" id="handle2b"></div>
         </div>
         <div id="bar3" class="bar">
-            <div class="handle" id="handle3a" style="left: -10px; top: -10px;"></div>
-            <div class="handle" id="handle3b" style="right: -10px; top: -10px;"></div>
+            <div class="handle" id="handle3a"></div>
+            <div class="handle" id="handle3b"></div>
         </div>
         
         <script>
             const bars = document.querySelectorAll('.bar');
-            const handles = document.querySelectorAll('.handle');
-            const SNAP_DISTANCE = 30;  // 자석 효과 거리 (픽셀 단위)
-
+            
             bars.forEach(bar => {{
                 bar.style.left = '100px';
                 bar.style.top = '100px';
@@ -104,44 +101,6 @@ if st.button('생성하기'):
                 document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
-                }});
-            }});
-
-            handles.forEach(handle => {{
-                handle.addEventListener('mousedown', (e) => {{
-                    handle.isDragging = true;
-                    handle.startX = e.clientX - handle.getBoundingClientRect().left;
-                    handle.startY = e.clientY - handle.getBoundingClientRect().top;
-                }});
-
-                document.addEventListener('mousemove', (e) => {{
-                    if (handle.isDragging) {{
-                        const handleRect = handle.getBoundingClientRect();
-                        const handleCenterX = handleRect.left + handleRect.width / 2;
-                        const handleCenterY = handleRect.top + handleRect.height / 2;
-                        
-                        handle.style.left = `${{e.clientX - handle.startX - handleRect.width / 2}}px`;
-                        handle.style.top = `${{e.clientY - handle.startY - handleRect.height / 2}}px`;
-
-                        handles.forEach(otherHandle => {{
-                            if (handle !== otherHandle) {{
-                                const rect1 = handle.getBoundingClientRect();
-                                const rect2 = otherHandle.getBoundingClientRect();
-                                const dx = rect1.left - rect2.left;
-                                const dy = rect1.top - rect2.top;
-                                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                                if (distance < SNAP_DISTANCE) {{
-                                    handle.style.left = `${{rect2.left + window.scrollX}}px`;
-                                    handle.style.top = `${{rect2.top + window.scrollY}}px`;
-                                }}
-                            }}
-                        }});
-                    }}
-                }});
-
-                document.addEventListener('mouseup', () => {{
-                    handle.isDragging = false;
                 }});
             }});
         </script>
