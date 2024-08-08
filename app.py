@@ -75,6 +75,11 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseFloat(bar.getAttribute('data-angle')) || 0;
+                        if (handle.id.endsWith('a')) {{
+                            bar.style.transformOrigin = 'right center';
+                        }} else {{
+                            bar.style.transformOrigin = 'left center';
+                        }}
                     }} else {{
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
@@ -92,9 +97,6 @@ if st.button('생성하기'):
                         let angle = Math.atan2(dy, dx) * (180 / Math.PI);
                         if (handle.id.endsWith('a')) {{
                             angle += 180;
-                            bar.style.transformOrigin = 'right center';
-                        }} else {{
-                            bar.style.transformOrigin = 'left center';
                         }}
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
