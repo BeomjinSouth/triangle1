@@ -21,7 +21,7 @@ if st.button('생성하기'):
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                transform-origin: 0% 50%;
+                transform-origin: left center;
             }}
             .handle {{
                 width: 20px;
@@ -61,55 +61,45 @@ if st.button('생성하기'):
         <script>
             const bars = document.querySelectorAll('.bar');
 
-            bars.forEach(bar => {{
+            bars.forEach(bar => {
                 let isDragging = false;
                 let isRotating = false;
-                let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY, barCenterX, barCenterY;
+                let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY;
 
-                bar.addEventListener('mousedown', (e) => {{
-                    if (e.target.classList.contains('handle')) {{
+                bar.addEventListener('mousedown', (e) => {
+                    if (e.target.classList.contains('handle')) {
                         isRotating = true;
                         handle = e.target;
                         otherHandle = handle.id.endsWith('a') ? handle.nextElementSibling : handle.previousElementSibling;
                         const rect = otherHandle.getBoundingClientRect();
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
-
-                        const barRect = bar.getBoundingClientRect();
-                        barCenterX = barRect.left + barRect.width / 2;
-                        barCenterY = barRect.top + barRect.height / 2;
-
-                        startX = e.clientX;
-                        startY = e.clientY;
                         initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
-                    }} else {{
+                    } else {
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
                         startY = e.clientY - bar.getBoundingClientRect().top;
-                    }}
-                }});
+                    }
+                });
 
-                document.addEventListener('mousemove', (e) => {{
-                    if (isDragging) {{
-                        bar.style.left = `${{e.clientX - startX}}px`;
-                        bar.style.top = `${{e.clientY - startY}}px`;
-                    }} else if (isRotating) {{
+                document.addEventListener('mousemove', (e) => {
+                    if (isDragging) {
+                        bar.style.left = `${e.clientX - startX}px`;
+                        bar.style.top = `${e.clientY - startY}px`;
+                    } else if (isRotating) {
                         const dx = e.clientX - fixedHandleX;
                         const dy = e.clientY - fixedHandleY;
                         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-
-                        const length = Math.sqrt(dx * dx + dy * dy);
-                        bar.style.transformOrigin = handle.id.endsWith('a') ? '0% 50%' : '100% 50%';
-                        bar.style.transform = `rotate(${{angle}}deg) translateX(${{length / 2}}px)`;
+                        bar.style.transform = `rotate(${angle}deg)`;
                         bar.setAttribute('data-angle', angle);
-                    }}
-                }});
+                    }
+                });
 
-                document.addEventListener('mouseup', () => {{
+                document.addEventListener('mouseup', () => {
                     isDragging = false;
                     isRotating = false;
-                }});
-            }});
+                });
+            });
         </script>
     </body>
     </html>
