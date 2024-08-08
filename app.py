@@ -150,8 +150,8 @@ if st.button('생성하기'):
 
                                     bar2.style.transform = `rotate(${Math.atan2(offsetY, offsetX) * (180 / Math.PI)}deg)`;
 
-                                    selectedHandle.style.left = `${otherHandle.offsetLeft}px`;
-                                    selectedHandle.style.top = `${otherHandle.offsetTop}px`;
+                                    selectedHandle.style.left = `${{otherHandle.offsetLeft}}px`;
+                                    selectedHandle.style.top = `${{otherHandle.offsetTop}}px`;
                                 }
                             }
                         }});
