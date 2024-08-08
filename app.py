@@ -19,9 +19,11 @@ if st.button('생성하기'):
                 position: absolute;
                 cursor: pointer;
                 display: flex;
+                justify-content: space-between;
                 align-items: center;
+                transform-origin: center;
             }}
-            .bar .handle {{
+            .handle {{
                 width: 20px;
                 height: 20px;
                 background-color: black;
@@ -62,18 +64,19 @@ if st.button('생성하기'):
             bars.forEach(bar => {{
                 bar.style.left = '100px';
                 bar.style.top = '100px';
-                bar.style.transformOrigin = 'left center';
                 let isDragging = false;
                 let isRotating = false;
-                let startX, startY, initialAngle, handle;
+                let startX, startY, initialAngle, handle, centerX, centerY;
 
                 bar.addEventListener('mousedown', (e) => {{
                     if (e.target.classList.contains('handle')) {{
                         isRotating = true;
                         handle = e.target;
                         const rect = bar.getBoundingClientRect();
-                        startX = e.clientX - rect.left;
-                        startY = e.clientY - rect.top;
+                        centerX = rect.left + rect.width / 2;
+                        centerY = rect.top + rect.height / 2;
+                        startX = e.clientX;
+                        startY = e.clientY;
                         initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
                     }} else {{
                         isDragging = true;
@@ -87,10 +90,9 @@ if st.button('생성하기'):
                         bar.style.left = `${{e.clientX - startX}}px`;
                         bar.style.top = `${{e.clientY - startY}}px`;
                     }} else if (isRotating) {{
-                        const rect = bar.getBoundingClientRect();
-                        const centerX = rect.left + rect.width / 2;
-                        const centerY = rect.top + rect.height / 2;
-                        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+                        const dx = e.clientX - centerX;
+                        const dy = e.clientY - centerY;
+                        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
                     }}
