@@ -61,13 +61,13 @@ if st.button('생성하기'):
         <script>
             const bars = document.querySelectorAll('.bar');
 
-            bars.forEach(bar => {
+            bars.forEach(bar => {{
                 let isDragging = false;
                 let isRotating = false;
                 let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY;
 
-                bar.addEventListener('mousedown', (e) => {
-                    if (e.target.classList.contains('handle')) {
+                bar.addEventListener('mousedown', (e) => {{
+                    if (e.target.classList.contains('handle')) {{
                         isRotating = true;
                         handle = e.target;
                         otherHandle = handle.id.endsWith('a') ? handle.nextElementSibling : handle.previousElementSibling;
@@ -75,31 +75,31 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
-                    } else {
+                    }} else {{
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
                         startY = e.clientY - bar.getBoundingClientRect().top;
-                    }
-                });
+                    }}
+                }});
 
-                document.addEventListener('mousemove', (e) => {
-                    if (isDragging) {
-                        bar.style.left = `${e.clientX - startX}px`;
-                        bar.style.top = `${e.clientY - startY}px`;
-                    } else if (isRotating) {
+                document.addEventListener('mousemove', (e) => {{
+                    if (isDragging) {{
+                        bar.style.left = `${{e.clientX - startX}}px`;
+                        bar.style.top = `${{e.clientY - startY}}px`;
+                    }} else if (isRotating) {{
                         const dx = e.clientX - fixedHandleX;
                         const dy = e.clientY - fixedHandleY;
                         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                        bar.style.transform = `rotate(${angle}deg)`;
+                        bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
-                    }
-                });
+                    }}
+                }});
 
-                document.addEventListener('mouseup', () => {
+                document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
-                });
-            });
+                }});
+            }});
         </script>
     </body>
     </html>
