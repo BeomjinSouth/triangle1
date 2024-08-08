@@ -150,7 +150,7 @@ if st.button('생성하기'):
 
                                     selectedHandle.style.left = `${{otherHandle.offsetLeft}}px`;
                                     selectedHandle.style.top = `${{otherHandle.offsetTop}}px`;
-                                }
+                                }}
                             }
                         }});
                     }
