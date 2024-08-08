@@ -1,32 +1,110 @@
 import streamlit as st
-import numpy as np
-import matplotlib.pyplot as plt
+import streamlit.components.v1 as components
 
-# 사용자로부터 나무막대 길이 입력 받기
 st.title('삼각형 만들기 웹앱')
+
 st.write('나무막대의 길이를 입력하세요 (cm)')
 
 a = st.number_input('막대 1 길이', min_value=1, max_value=100)
 b = st.number_input('막대 2 길이', min_value=1, max_value=100)
 c = st.number_input('막대 3 길이', min_value=1, max_value=100)
 
-angle_a = st.slider('막대 1의 각도', 0, 360, 0)
-angle_b = st.slider('막대  2의 각도', 0, 360, 0)
-angle_c = st.slider('막대 3의 각도', 0, 360, 0)
+if st.button('생성하기'):
+    html_code = f"""
+    <html>
+    <head>
+        <style>
+            .bar {{
+                height: 20px;
+                position: absolute;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transform-origin: center;
+            }}
+            .handle {{
+                width: 20px;
+                height: 20px;
+                background-color: black;
+                border-radius: 50%;
+                cursor: pointer;
+            }}
+            #bar1 {{
+                background-color: red;
+                width: {a * 30}px;
+            }}
+            #bar2 {{
+                background-color: green;
+                width: {b * 30}px;
+            }}
+            #bar3 {{
+                background-color: blue;
+                width: {c * 30}px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div id="bar1" class="bar">
+            <div class="handle" id="handle1a"></div>
+            <div class="handle" id="handle1b"></div>
+        </div>
+        <div id="bar2" class="bar">
+            <div class="handle" id="handle2a"></div>
+            <div class="handle" id="handle2b"></div>
+        </div>
+        <div id="bar3" class="bar">
+            <div class="handle" id="handle3a"></div>
+            <div class="handle" id="handle3b"></div>
+        </div>
+        
+        <script>
+            const bars = document.querySelectorAll('.bar');
+            
+            bars.forEach(bar => {{
+                bar.style.left = '100px';
+                bar.style.top = '100px';
+                let isDragging = false;
+                let isRotating = false;
+                let startX, startY, initialAngle, handle, centerX, centerY;
 
-fig, ax = plt.subplots()
-x = np.array([0, a, b * np.cos(np.radians(angle_b))])
-y = np.array([0, 0, b * np.sin(np.radians(angle_b))])
-x = np.append(x, c * np.cos(np.radians(angle_c)))
-y = np.append(y, c * np.sin(np.radians(angle_c)))
+                bar.addEventListener('mousedown', (e) => {{
+                    if (e.target.classList.contains('handle')) {{
+                        isRotating = true;
+                        handle = e.target;
+                        const rect = bar.getBoundingClientRect();
+                        centerX = rect.left + rect.width / 2;
+                        centerY = rect.top + rect.height / 2;
+                        startX = e.clientX;
+                        startY = e.clientY;
+                        initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
+                    }} else {{
+                        isDragging = true;
+                        startX = e.clientX - bar.getBoundingClientRect().left;
+                        startY = e.clientY - bar.getBoundingClientRect().top;
+                    }}
+                }});
 
-ax.plot([x[0], x[1]], [y[0], y[1]], marker='o')
-ax.plot([x[1], x[2]], [y[1], y[2]], marker='o')
-ax.plot([x[2], x[0]], [y[2], y[0]], marker='o')
+                document.addEventListener('mousemove', (e) => {{
+                    if (isDragging) {{
+                        bar.style.left = `${{e.clientX - startX}}px`;
+                        bar.style.top = `${{e.clientY - startY}}px`;
+                    }} else if (isRotating) {{
+                        const dx = e.clientX - centerX;
+                        const dy = e.clientY - centerY;
+                        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                        bar.style.transform = `rotate(${{angle}}deg)`;
+                        bar.setAttribute('data-angle', angle);
+                    }}
+                }});
 
-ax.set_xlim(-max(a, b, c), max(a, b, c))
-ax.set_ylim(-max(a, b, c), max(a, b, c))
-ax.set_aspect('equal')
-st.pyplot(fig)
-
-st.write('각도를 조정하여 삼각형을 만들어보세요.')
+                document.addEventListener('mouseup', () => {{
+                    isDragging = false;
+                    isRotating = false;
+                }});
+            }});
+        </script>
+    </body>
+    </html>
+    """
+    components.html(html_code, height=600)
