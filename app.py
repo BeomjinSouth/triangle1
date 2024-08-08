@@ -21,6 +21,7 @@ if st.button('생성하기'):
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                transform-origin: left center;
             }}
             .handle {{
                 width: 20px;
@@ -70,7 +71,7 @@ if st.button('생성하기'):
                         isRotating = true;
                         handle = e.target;
                         otherHandle = handle.id.endsWith('a') ? handle.nextElementSibling : handle.previousElementSibling;
-                        const rect = otherHandle.getBoundingClientRect();
+                        const rect = handle.id.endsWith('a') ? bar.getBoundingClientRect() : otherHandle.getBoundingClientRect();
                         centerX = rect.left + rect.width / 2;
                         centerY = rect.top + rect.height / 2;
                         startX = e.clientX;
