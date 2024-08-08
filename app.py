@@ -21,7 +21,7 @@ if st.button('생성하기'):
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                transform-origin: left center;
+                transform-origin: 0% 50%;
             }}
             .handle {{
                 width: 20px;
@@ -64,7 +64,7 @@ if st.button('생성하기'):
             bars.forEach(bar => {{
                 let isDragging = false;
                 let isRotating = false;
-                let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY;
+                let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY, barCenterX, barCenterY;
 
                 bar.addEventListener('mousedown', (e) => {{
                     if (e.target.classList.contains('handle')) {{
@@ -74,6 +74,11 @@ if st.button('생성하기'):
                         const rect = otherHandle.getBoundingClientRect();
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
+
+                        const barRect = bar.getBoundingClientRect();
+                        barCenterX = barRect.left + barRect.width / 2;
+                        barCenterY = barRect.top + barRect.height / 2;
+
                         startX = e.clientX;
                         startY = e.clientY;
                         initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
@@ -92,8 +97,10 @@ if st.button('생성하기'):
                         const dx = e.clientX - fixedHandleX;
                         const dy = e.clientY - fixedHandleY;
                         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                        bar.style.transformOrigin = handle.id.endsWith('a') ? 'right' : 'left';
-                        bar.style.transform = `rotate(${{angle}}deg)`;
+
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        bar.style.transformOrigin = handle.id.endsWith('a') ? '0% 50%' : '100% 50%';
+                        bar.style.transform = `rotate(${{angle}}deg) translateX(${{length / 2}}px)`;
                         bar.setAttribute('data-angle', angle);
                     }}
                 }});
