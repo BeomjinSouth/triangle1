@@ -107,7 +107,7 @@ if st.button('생성하기'):
                     isDragging = false;
                     isRotating = false;
                 }});
-            }
+            }}
 
             function addHandleEventListeners(handle) {{
                 handle.addEventListener('mousedown', (e) => {{
