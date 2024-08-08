@@ -144,9 +144,9 @@ if st.button('생성하기'):
                                     bar1.style.left = `${{parseInt(bar1.style.left) + offsetX}}px`;
                                     bar1.style.top = `${{parseInt(bar1.style.top) + offsetY}}px`;
 
-                                    bar1.style.transform = `rotate(${Math.atan2(offsetY, offsetX) * (180 / Math.PI)}deg)`;
+                                    bar1.style.transform = `rotate(${{Math.atan2(offsetY, offsetX) * (180 / Math.PI)}}deg)`;
 
-                                    bar2.style.transform = `rotate(${Math.atan2(offsetY, offsetX) * (180 / Math.PI)}deg)`;
+                                    bar2.style.transform = `rotate(${{Math.atan2(offsetY, offsetX) * (180 / Math.PI)}}deg)`;
 
                                     selectedHandle.style.left = `${{otherHandle.offsetLeft}}px`;
                                     selectedHandle.style.top = `${{otherHandle.offsetTop}}px`;
