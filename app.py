@@ -63,7 +63,7 @@ if st.button('생성하기'):
                 bar.addEventListener('wheel', (e) => {{
                     const currentAngle = parseInt(bar.getAttribute('data-angle')) || 0;
                     const newAngle = currentAngle + (e.deltaY > 0 ? 10 : -10);
-                    bar.style.transform = `rotate(${newAngle}deg)`;
+                    bar.style.transform = 'rotate(' + newAngle + 'deg)';
                     bar.setAttribute('data-angle', newAngle);
                 }});
             }});
