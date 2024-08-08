@@ -107,6 +107,12 @@ if st.button('생성하기'):
                     isDragging = false;
                     isRotating = false;
                 }});
+
+                bar.addEventListener('mousedown', (e) => {{
+                    if (!e.target.classList.contains('handle')) {{
+                        bar.style.transformOrigin = 'left center';
+                    }}
+                }});
             }});
         </script>
     </body>
