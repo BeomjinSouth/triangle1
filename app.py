@@ -64,16 +64,16 @@ if st.button('생성하기'):
             bars.forEach(bar => {{
                 let isDragging = false;
                 let isRotating = false;
-                let startX, startY, initialAngle, handle, fixedHandle, otherHandle, centerX, centerY;
+                let startX, startY, initialAngle, handle, otherHandle, fixedHandleX, fixedHandleY;
 
                 bar.addEventListener('mousedown', (e) => {{
                     if (e.target.classList.contains('handle')) {{
                         isRotating = true;
                         handle = e.target;
                         otherHandle = handle.id.endsWith('a') ? handle.nextElementSibling : handle.previousElementSibling;
-                        const rect = handle.id.endsWith('a') ? bar.getBoundingClientRect() : otherHandle.getBoundingClientRect();
-                        centerX = rect.left + rect.width / 2;
-                        centerY = rect.top + rect.height / 2;
+                        const rect = otherHandle.getBoundingClientRect();
+                        fixedHandleX = rect.left + rect.width / 2;
+                        fixedHandleY = rect.top + rect.height / 2;
                         startX = e.clientX;
                         startY = e.clientY;
                         initialAngle = parseInt(bar.getAttribute('data-angle')) || 0;
@@ -89,10 +89,10 @@ if st.button('생성하기'):
                         bar.style.left = `${{e.clientX - startX}}px`;
                         bar.style.top = `${{e.clientY - startY}}px`;
                     }} else if (isRotating) {{
-                        const dx = e.clientX - centerX;
-                        const dy = e.clientY - centerY;
+                        const dx = e.clientX - fixedHandleX;
+                        const dy = e.clientY - fixedHandleY;
                         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-                        bar.style.transformOrigin = handle.id.endsWith('a') ? 'left' : 'right';
+                        bar.style.transformOrigin = handle.id.endsWith('a') ? 'right' : 'left';
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
                     }}
