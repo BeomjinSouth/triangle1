@@ -60,15 +60,13 @@ if st.button('생성하기'):
         </div>
         
         <script>
-            const bars = document.querySelectorAll('.bar');
-            const handles = document.querySelectorAll('.handle');
             const snapDistance = 20;  // Adjust snap distance as needed
             
             function getDistance(x1, y1, x2, y2) {{
                 return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
             }}
-            
-            bars.forEach(bar => {{
+
+            function addBarEventListeners(bar) {{
                 bar.style.left = '100px';
                 bar.style.top = '100px';
                 let isDragging = false;
@@ -109,9 +107,9 @@ if st.button('생성하기'):
                     isDragging = false;
                     isRotating = false;
                 }});
-            }});
+            }
 
-            handles.forEach(handle => {{
+            function addHandleEventListeners(handle) {{
                 handle.addEventListener('mousedown', (e) => {{
                     let selectedHandle = handle;
                     document.addEventListener('mousemove', onMouseMove);
@@ -157,7 +155,13 @@ if st.button('생성하기'):
                         }});
                     }
                 }});
-            }});
+            }
+
+            const bars = document.querySelectorAll('.bar');
+            const handles = document.querySelectorAll('.handle');
+
+            bars.forEach(addBarEventListeners);
+            handles.forEach(addHandleEventListeners);
         </script>
     </body>
     </html>
