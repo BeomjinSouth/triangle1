@@ -89,11 +89,9 @@ if st.button('생성하기'):
                     }} else if (isRotating) {{
                         const dx = e.clientX - fixedHandleX;
                         const dy = e.clientY - fixedHandleY;
-                        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+                        let angle = Math.atan2(dy, dx) * (180 / Math.PI);
                         if (handle.id.endsWith('a')) {{
-                            bar.style.transformOrigin = 'left';
-                        }} else {{
-                            bar.style.transformOrigin = 'right';
+                            angle = angle + 180;
                         }}
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
