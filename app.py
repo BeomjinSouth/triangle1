@@ -29,6 +29,7 @@ if st.button('생성하기'):
                 background-color: black;
                 border-radius: 50%;
                 cursor: pointer;
+                position: relative;
             }}
             #bar1 {{
                 background-color: red;
@@ -62,7 +63,7 @@ if st.button('생성하기'):
             const bars = document.querySelectorAll('.bar');
             const handles = document.querySelectorAll('.handle');
             const SNAP_DISTANCE = 30;  // 자석 효과 거리 (픽셀 단위)
-            
+
             bars.forEach(bar => {{
                 bar.style.left = '100px';
                 bar.style.top = '100px';
@@ -107,21 +108,36 @@ if st.button('생성하기'):
             }});
 
             handles.forEach(handle => {{
-                handle.addEventListener('mousemove', () => {{
-                    handles.forEach(otherHandle => {{
-                        if (handle !== otherHandle) {{
-                            const rect1 = handle.getBoundingClientRect();
-                            const rect2 = otherHandle.getBoundingClientRect();
-                            const dx = rect1.left - rect2.left;
-                            const dy = rect1.top - rect2.top;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
+                handle.addEventListener('mousedown', (e) => {{
+                    handle.isDragging = true;
+                    handle.startX = e.clientX - handle.getBoundingClientRect().left;
+                    handle.startY = e.clientY - handle.getBoundingClientRect().top;
+                }});
 
-                            if (distance < SNAP_DISTANCE) {{
-                                handle.style.left = `${{rect2.left + window.scrollX}}px`;
-                                handle.style.top = `${{rect2.top + window.scrollY}}px`;
+                document.addEventListener('mousemove', (e) => {{
+                    if (handle.isDragging) {{
+                        handle.style.left = `${{e.clientX - handle.startX}}px`;
+                        handle.style.top = `${{e.clientY - handle.startY}}px`;
+
+                        handles.forEach(otherHandle => {{
+                            if (handle !== otherHandle) {{
+                                const rect1 = handle.getBoundingClientRect();
+                                const rect2 = otherHandle.getBoundingClientRect();
+                                const dx = rect1.left - rect2.left;
+                                const dy = rect1.top - rect2.top;
+                                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                                if (distance < SNAP_DISTANCE) {{
+                                    handle.style.left = `${{rect2.left + window.scrollX}}px`;
+                                    handle.style.top = `${{rect2.top + window.scrollY}}px`;
+                                }}
                             }}
-                        }}
-                    }});
+                        }});
+                    }}
+                }});
+
+                document.addEventListener('mouseup', () => {{
+                    handle.isDragging = false;
                 }});
             }});
         </script>
