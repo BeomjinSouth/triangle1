@@ -15,22 +15,21 @@ if st.button('생성하기'):
     <head>
         <style>
             .bar {{
-                width: 10px;
-                height: 10px;
+                height: 20px;  /* 두께를 증가시킵니다 */
                 position: absolute;
                 cursor: pointer;
             }}
             #bar1 {{
                 background-color: red;
-                width: {a * 10}px;
+                width: {a * 30}px;  /* 길이를 3배로 증가시킵니다 */
             }}
             #bar2 {{
                 background-color: green;
-                width: {b * 10}px;
+                width: {b * 30}px;  /* 길이를 3배로 증가시킵니다 */
             }}
             #bar3 {{
                 background-color: blue;
-                width: {c * 10}px;
+                width: {c * 30}px;  /* 길이를 3배로 증가시킵니다 */
             }}
         </style>
     </head>
