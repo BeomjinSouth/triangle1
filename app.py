@@ -45,33 +45,32 @@ if st.button('생성하기'):
         </style>
     </head>
     <body>
-        <div id="bar1" class="bar">
+        <div id="bar1" class="bar" data-angle="0" style="left: 100px; top: 100px;">
             <div class="handle" id="handle1a"></div>
             <div class="handle" id="handle1b"></div>
         </div>
-        <div id="bar2" class="bar">
+        <div id="bar2" class="bar" data-angle="0" style="left: 200px; top: 200px;">
             <div class="handle" id="handle2a"></div>
             <div class="handle" id="handle2b"></div>
         </div>
-        <div id="bar3" class="bar">
+        <div id="bar3" class="bar" data-angle="0" style="left: 300px; top: 300px;">
             <div class="handle" id="handle3a"></div>
             <div class="handle" id="handle3b"></div>
         </div>
         
         <script>
             const bars = document.querySelectorAll('.bar');
-            
+
             bars.forEach(bar => {{
-                bar.style.left = '100px';
-                bar.style.top = '100px';
                 let isDragging = false;
                 let isRotating = false;
-                let startX, startY, initialAngle, handle, centerX, centerY;
+                let startX, startY, initialAngle, handle, fixedHandle, centerX, centerY;
 
                 bar.addEventListener('mousedown', (e) => {{
                     if (e.target.classList.contains('handle')) {{
                         isRotating = true;
                         handle = e.target;
+                        fixedHandle = handle.id.endsWith('a') ? handle.nextElementSibling : handle.previousElementSibling;
                         const rect = bar.getBoundingClientRect();
                         centerX = rect.left + rect.width / 2;
                         centerY = rect.top + rect.height / 2;
@@ -90,8 +89,11 @@ if st.button('생성하기'):
                         bar.style.left = `${{e.clientX - startX}}px`;
                         bar.style.top = `${{e.clientY - startY}}px`;
                     }} else if (isRotating) {{
-                        const dx = e.clientX - centerX;
-                        const dy = e.clientY - centerY;
+                        const rect = fixedHandle.getBoundingClientRect();
+                        const fx = rect.left + rect.width / 2;
+                        const fy = rect.top + rect.height / 2;
+                        const dx = e.clientX - fx;
+                        const dy = e.clientY - fy;
                         const angle = Math.atan2(dy, dx) * (180 / Math.PI);
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
