@@ -18,15 +18,26 @@ if st.button('생성하기'):
                 width: 10px;
                 height: 10px;
                 position: absolute;
-                background-color: black;
                 cursor: pointer;
+            }}
+            #bar1 {{
+                background-color: red;
+                width: {a * 10}px;
+            }}
+            #bar2 {{
+                background-color: green;
+                width: {b * 10}px;
+            }}
+            #bar3 {{
+                background-color: blue;
+                width: {c * 10}px;
             }}
         </style>
     </head>
     <body>
-        <div id="bar1" class="bar" style="width: {a * 10}px;"></div>
-        <div id="bar2" class="bar" style="width: {b * 10}px;"></div>
-        <div id="bar3" class="bar" style="width: {c * 10}px;"></div>
+        <div id="bar1" class="bar"></div>
+        <div id="bar2" class="bar"></div>
+        <div id="bar3" class="bar"></div>
         
         <script>
             const bars = document.querySelectorAll('.bar');
@@ -48,9 +59,14 @@ if st.button('생성하기'):
                         document.removeEventListener('mousemove', onMouseMove);
                     }}, {{ once: true }});
                 }});
+                
+                bar.addEventListener('wheel', (e) => {{
+                    const angle = e.deltaY > 0 ? 10 : -10;
+                    bar.style.transform = `rotate(${angle}deg)`;
+                }});
             }});
         </script>
     </body>
     </html>
     """
-    components.html(html_code, height=400)
+    components.html(html_code, height=600)
