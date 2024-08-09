@@ -22,6 +22,7 @@ if st.button('생성하기'):
                 justify-content: space-between;
                 align-items: center;
                 transform-origin: left center;
+                transition: transform 0.1s, left 0.1s, top 0.1s;
             }}
             .handle {{
                 width: 20px;
@@ -107,6 +108,10 @@ if st.button('생성하기'):
                 document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
+                    startX = null;
+                    startY = null;
+                    fixedHandleX = null;
+                    fixedHandleY = null;
                     bar.style.transformOrigin = 'left center';  // 회전이 끝나면 원상복귀
                 }});
 
@@ -114,16 +119,6 @@ if st.button('생성하기'):
                     if (!e.target.classList.contains('handle')) {{
                         bar.style.transformOrigin = 'left center';
                     }}
-                }});
-
-                // 마우스를 놓을 때 상태를 초기화
-                document.addEventListener('mouseup', () => {{
-                    isDragging = false;
-                    isRotating = false;
-                    startX = null;
-                    startY = null;
-                    fixedHandleX = null;
-                    fixedHandleY = null;
                 }});
             }});
         </script>
