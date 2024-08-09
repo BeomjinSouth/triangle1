@@ -75,6 +75,13 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseFloat(bar.getAttribute('data-angle')) || 0;
+
+                        // 핸들 위치에 따라 회전 중심을 변경하지 않습니다.
+                        if (handle.id.endsWith('a')) {{
+                            bar.style.transformOrigin = 'right center';
+                        }} else {{
+                            bar.style.transformOrigin = 'left center';
+                        }}
                     }} else {{
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
