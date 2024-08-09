@@ -22,7 +22,6 @@ if st.button('생성하기'):
                 justify-content: space-between;
                 align-items: center;
                 transform-origin: left center;
-                transition: transform 0.1s, left 0.1s, top 0.1s;
             }}
             .handle {{
                 width: 20px;
@@ -76,12 +75,6 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseFloat(bar.getAttribute('data-angle')) || 0;
-
-                        if (handle.id.endsWith('a')) {{
-                            bar.style.transformOrigin = 'right center';
-                        }} else {{
-                            bar.style.transformOrigin = 'left center';
-                        }}
                     }} else {{
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
@@ -108,17 +101,6 @@ if st.button('생성하기'):
                 document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
-                    startX = null;
-                    startY = null;
-                    fixedHandleX = null;
-                    fixedHandleY = null;
-                    bar.style.transformOrigin = 'left center';  // 회전이 끝나면 원상복귀
-                }});
-
-                bar.addEventListener('mousedown', (e) => {{
-                    if (!e.target.classList.contains('handle')) {{
-                        bar.style.transformOrigin = 'left center';
-                    }}
                 }});
             }});
         </script>
