@@ -75,6 +75,7 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseFloat(bar.getAttribute('data-angle')) || 0;
+
                         if (handle.id.endsWith('a')) {{
                             bar.style.transformOrigin = 'right center';
                         }} else {{
@@ -106,6 +107,7 @@ if st.button('생성하기'):
                 document.addEventListener('mouseup', () => {{
                     isDragging = false;
                     isRotating = false;
+                    bar.style.transformOrigin = 'left center';  // 회전이 끝나면 원상복귀
                 }});
 
                 bar.addEventListener('mousedown', (e) => {{
