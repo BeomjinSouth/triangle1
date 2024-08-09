@@ -115,6 +115,16 @@ if st.button('생성하기'):
                         bar.style.transformOrigin = 'left center';
                     }}
                 }});
+
+                // 마우스를 놓을 때 상태를 초기화
+                document.addEventListener('mouseup', () => {{
+                    isDragging = false;
+                    isRotating = false;
+                    startX = null;
+                    startY = null;
+                    fixedHandleX = null;
+                    fixedHandleY = null;
+                }});
             }});
         </script>
     </body>
