@@ -77,7 +77,22 @@ if st.button('생성하기'):
             }}
 
             function calculateAngle(x1, y1, x2, y2) {{
-                return Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+                let angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+                return angle < 0 ? angle + 360 : angle;
+            }}
+
+            function snapToHandle(handle1, handle2) {{
+                const rect1 = handle1.getBoundingClientRect();
+                const rect2 = handle2.getBoundingClientRect();
+                const distance = calculateDistance(rect1.left + rect1.width / 2, rect1.top + rect1.height / 2,
+                                                    rect2.left + rect2.width / 2, rect2.top + rect2.height / 2);
+
+                if (distance < 30) {{
+                    handle1.style.left = `${{rect2.left - rect1.width/2}}px`;
+                    handle1.style.top = `${{rect2.top - rect1.height/2}}px`;
+                    return true;
+                }}
+                return false;
             }}
 
             bars.forEach(bar => {{
@@ -116,34 +131,23 @@ if st.button('생성하기'):
                         bar.setAttribute('data-angle', angle);
                     }}
 
-                    // Handle overlap detection and angle calculation
-                    const rect1 = document.getElementById('handle1b').getBoundingClientRect();
-                    const rect2 = document.getElementById('handle2a').getBoundingClientRect();
-                    const rect3 = document.getElementById('handle3a').getBoundingClientRect();
+                    // 자석처럼 달라붙기
+                    const rect1b = document.getElementById('handle1b').getBoundingClientRect();
+                    const rect2a = document.getElementById('handle2a').getBoundingClientRect();
+                    const rect2b = document.getElementById('handle2b').getBoundingClientRect();
+                    const rect3a = document.getElementById('handle3a').getBoundingClientRect();
 
-                    const distance12 = calculateDistance(rect1.left, rect1.top, rect2.left, rect2.top);
-                    const distance13 = calculateDistance(rect1.left, rect1.top, rect3.left, rect3.top);
-                    const distance23 = calculateDistance(rect2.left, rect2.top, rect3.left, rect3.top);
+                    let snapped = snapToHandle(document.getElementById('handle1b'), document.getElementById('handle2a'))
+                                || snapToHandle(document.getElementById('handle1b'), document.getElementById('handle3a'))
+                                || snapToHandle(document.getElementById('handle2b'), document.getElementById('handle3a'));
 
-                    if (distance12 < 30) {{
-                        bar.style.left = `${{rect2.left - rect1.width/2}}px`;
-                        bar.style.top = `${{rect2.top - rect1.height/2}}px`;
-                    }} else if (distance13 < 30) {{
-                        bar.style.left = `${{rect3.left - rect1.width/2}}px`;
-                        bar.style.top = `${{rect3.top - rect1.height/2}}px`;
-                    }} else if (distance23 < 30) {{
-                        bar.style.left = `${{rect3.left - rect2.width/2}}px`;
-                        bar.style.top = `${{rect3.top - rect2.height/2}}px`;
-                    }}
+                    if (snapped) {{
+                        const angle = calculateAngle(rect1b.left, rect1b.top, rect2a.left, rect2a.top);
+                        angleText.textContent = `${{Math.round(angle)}}°`;
 
-                    if (distance12 < 30 || distance13 < 30 || distance23 < 30) {{
-                        const angle1 = calculateAngle(rect1.left, rect1.top, rect2.left, rect2.top);
-                        const roundedAngle = Math.abs(Math.round(angle1));
-                        angleText.textContent = `${{roundedAngle}}°`;
-
-                        // 위치 조정: 두 핸들 사이의 중앙에 각도 표시
-                        const middleX = (rect1.left + rect2.left) / 2;
-                        const middleY = (rect1.top + rect2.top) / 2;
+                        // 각도 표시 위치 조정
+                        const middleX = (rect1b.left + rect2a.left) / 2;
+                        const middleY = (rect1b.top + rect2a.top) / 2;
                         angleDisplay.style.left = `${{middleX}}px`;
                         angleDisplay.style.top = `${{middleY}}px`;
                     }} else {{
