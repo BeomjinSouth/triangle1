@@ -42,6 +42,14 @@ if st.button('생성하기'):
                 background-color: blue;
                 width: {c * 30}px;
             }}
+            #angle-display {{
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                font-size: 20px;
+                font-weight: bold;
+                color: black;
+            }}
         </style>
     </head>
     <body>
@@ -58,8 +66,19 @@ if st.button('생성하기'):
             <div class="handle" id="handle3b"></div>
         </div>
         
+        <div id="angle-display">Angle: 0°</div>
+        
         <script>
             const bars = document.querySelectorAll('.bar');
+            const angleDisplay = document.getElementById('angle-display');
+
+            function calculateDistance(x1, y1, x2, y2) {{
+                return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            }}
+
+            function calculateAngle(x1, y1, x2, y2) {{
+                return Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+            }}
 
             bars.forEach(bar => {{
                 let isDragging = false;
@@ -95,6 +114,18 @@ if st.button('생성하기'):
                         }}
                         bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
+                    }}
+
+                    // Handle overlap detection and angle calculation
+                    const rect1 = document.getElementById('handle1b').getBoundingClientRect();
+                    const rect2 = document.getElementById('handle2a').getBoundingClientRect();
+                    const distance = calculateDistance(rect1.left, rect1.top, rect2.left, rect2.top);
+
+                    if (distance < 10) {{
+                        const angle1 = calculateAngle(rect1.left, rect1.top, rect2.left, rect2.top);
+                        angleDisplay.textContent = `Angle: ${{Math.abs(Math.round(angle1))}}°`;
+                    }} else {{
+                        angleDisplay.textContent = 'Angle: 0°';
                     }}
                 }});
 
