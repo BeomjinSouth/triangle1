@@ -93,7 +93,7 @@ if st.button('생성하기'):
                         if (handle.id.endsWith('a')) {{
                             angle += 180;
                         }}
-                        bar.style.transform = `rotate(${{angle}}deg)`;
+                        bar.style.transform = rotate(${{angle}}deg);
                         bar.setAttribute('data-angle', angle);
                     }}
                 }});
