@@ -119,9 +119,24 @@ if st.button('생성하기'):
                     // Handle overlap detection and angle calculation
                     const rect1 = document.getElementById('handle1b').getBoundingClientRect();
                     const rect2 = document.getElementById('handle2a').getBoundingClientRect();
-                    const distance = calculateDistance(rect1.left, rect1.top, rect2.left, rect2.top);
+                    const rect3 = document.getElementById('handle3a').getBoundingClientRect();
 
-                    if (distance < 10) {{
+                    const distance12 = calculateDistance(rect1.left, rect1.top, rect2.left, rect2.top);
+                    const distance13 = calculateDistance(rect1.left, rect1.top, rect3.left, rect3.top);
+                    const distance23 = calculateDistance(rect2.left, rect2.top, rect3.left, rect3.top);
+
+                    if (distance12 < 30) {{
+                        bar.style.left = `${{rect2.left - rect1.width/2}}px`;
+                        bar.style.top = `${{rect2.top - rect1.height/2}}px`;
+                    }} else if (distance13 < 30) {{
+                        bar.style.left = `${{rect3.left - rect1.width/2}}px`;
+                        bar.style.top = `${{rect3.top - rect1.height/2}}px`;
+                    }} else if (distance23 < 30) {{
+                        bar.style.left = `${{rect3.left - rect2.width/2}}px`;
+                        bar.style.top = `${{rect3.top - rect2.height/2}}px`;
+                    }}
+
+                    if (distance12 < 30 || distance13 < 30 || distance23 < 30) {{
                         const angle1 = calculateAngle(rect1.left, rect1.top, rect2.left, rect2.top);
                         const roundedAngle = Math.abs(Math.round(angle1));
                         angleText.textContent = `${{roundedAngle}}°`;
