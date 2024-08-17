@@ -44,11 +44,10 @@ if st.button('생성하기'):
             }}
             #angle-display {{
                 position: absolute;
-                top: 20px;
-                left: 20px;
                 font-size: 20px;
                 font-weight: bold;
                 color: black;
+                transform: translate(-50%, -50%);
             }}
         </style>
     </head>
@@ -66,11 +65,12 @@ if st.button('생성하기'):
             <div class="handle" id="handle3b"></div>
         </div>
         
-        <div id="angle-display">Angle: 0°</div>
+        <div id="angle-display"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAbElEQVR42mL8//8/AwXgPZhxP2UaomISWNjY5YOKCjBFpsCsSRqWwyJBGoCaYoZwI2II2MlRgAUZKuMAIokZoZZRWQ0kV5AVxKoAKQxiQJAxslFkqKKTREooDmjAoVCkM8wFMEGaCVoAH0VApRQODhY8KQqVhJZANQkAYVtM53m9A0AAAAASUVORK5CYII=" style="vertical-align:middle;" /> <span id="angle-text">0°</span></div>
         
         <script>
             const bars = document.querySelectorAll('.bar');
             const angleDisplay = document.getElementById('angle-display');
+            const angleText = document.getElementById('angle-text');
 
             function calculateDistance(x1, y1, x2, y2) {{
                 return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
@@ -123,9 +123,16 @@ if st.button('생성하기'):
 
                     if (distance < 10) {{
                         const angle1 = calculateAngle(rect1.left, rect1.top, rect2.left, rect2.top);
-                        angleDisplay.textContent = `Angle: ${{Math.abs(Math.round(angle1))}}°`;
+                        const roundedAngle = Math.abs(Math.round(angle1));
+                        angleText.textContent = `${{roundedAngle}}°`;
+
+                        // 위치 조정: 두 핸들 사이의 중앙에 각도 표시
+                        const middleX = (rect1.left + rect2.left) / 2;
+                        const middleY = (rect1.top + rect2.top) / 2;
+                        angleDisplay.style.left = `${{middleX}}px`;
+                        angleDisplay.style.top = `${{middleY}}px`;
                     }} else {{
-                        angleDisplay.textContent = 'Angle: 0°';
+                        angleText.textContent = '0°';
                     }}
                 }});
 
