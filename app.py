@@ -75,6 +75,13 @@ if st.button('생성하기'):
                         fixedHandleX = rect.left + rect.width / 2;
                         fixedHandleY = rect.top + rect.height / 2;
                         initialAngle = parseFloat(bar.getAttribute('data-angle')) || 0;
+
+                        // 핸들 위치에 따라 회전 중심을 변경하지 않습니다.
+                        if (handle.id.endsWith('a')) {{
+                            bar.style.transformOrigin = 'right center';
+                        }} else {{
+                            bar.style.transformOrigin = 'left center';
+                        }}
                     }} else {{
                         isDragging = true;
                         startX = e.clientX - bar.getBoundingClientRect().left;
@@ -84,8 +91,8 @@ if st.button('생성하기'):
 
                 document.addEventListener('mousemove', (e) => {{
                     if (isDragging) {{
-                        bar.style.left = ${{e.clientX - startX}}px;
-                        bar.style.top = ${{e.clientY - startY}}px;
+                        bar.style.left = `${{e.clientX - startX}}px`;
+                        bar.style.top = `${{e.clientY - startY}}px`;
                     }} else if (isRotating) {{
                         const dx = e.clientX - fixedHandleX;
                         const dy = e.clientY - fixedHandleY;
@@ -93,7 +100,7 @@ if st.button('생성하기'):
                         if (handle.id.endsWith('a')) {{
                             angle += 180;
                         }}
-                        bar.style.transform = rotate(${{angle}}deg);
+                        bar.style.transform = `rotate(${{angle}}deg)`;
                         bar.setAttribute('data-angle', angle);
                     }}
                 }});
